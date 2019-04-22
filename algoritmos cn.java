@@ -22,7 +22,7 @@ public class MyClass {
     }
 }
 
-Bissecção
+BissecÃ§Ã£o
 -------------------------------------------
 
 import java.lang.Math;
@@ -107,5 +107,5 @@ public class MyClass {
     }
 }
 
-Solução de sistema de equações f(x,y) e g(x,y) - Newton-Raphson
+SoluÃ§Ã£o de sistema de equaÃ§Ãµes f(x,y) e g(x,y) - Newton-Raphson
 --------------------------------------------------------------------------------------

@@ -109,3 +109,96 @@ public class MyClass {
     	return A;
     }
 }
+
+
+Decomposição LU - dart
+--------------------------------------------------------------------------------------
+main() {
+  List<List<double>> b = [[4], [7], [-1], [0]];
+  List<List<double>> _u = [[1, 2, -2, 1], [2, 5, -2, 3], [-2, -2, 5, 3], [1, 3, 3, 2]];	//vai virar a matriz U.
+  List<List<double>> _l = List<List<double>>(_u.length);
+
+  criarMatrizL(_l, _u);
+  definirMatrizLeU(_l, _u);
+  List<List<double>> _Linvertida = inverterMatriz(_l, _l.length); //inverte _l tb n sei pq...
+  List<List<double>> _y = mat_transpose(multiplicarMatrizes(_Linvertida, b));
+	List<List<double>> _Uinvertida = inverterMatriz(_u, _u.length);
+	List<List<double>> _x = mat_transpose(multiplicarMatrizes(_Uinvertida, _y));
+  print(_x);
+ 
+
+
+}
+
+  void criarMatrizL(List<List<double>> l, List<List<double>> a){
+    for(int i = 0; i < a.length; i++){
+      l[i] = List<double>(a[0].length);
+      for(int j = 0; j < a[0].length; j++){
+        if(i == j){
+          l[i][j] = 1;
+        }
+        else{
+          l[i][j] = 0;
+        }
+      }
+    }
+  }
+
+  void definirMatrizLeU(List<List<double>> l, List<List<double>> a){  
+    for(int i = 0; i < a.length; i++){	//Anda na linha
+      for(int k = i + 1; k < a.length; k++){	//Anda na linha debaixo kk
+        for(int j = 0; j < a[0].length; j++){	//Anda nas colunas 
+          if(k > i){
+            l[k][i] = (a[i][k] / a[i][i]);
+          }
+          a[k][j] = a[k][j] - (a[i][k] / a[i][i])*a[i][j];
+        }
+      }
+    }
+  }
+
+  List<List<double>> multiplicarMatrizes(List<List<double>> a, List<List<double>> b){
+    List<double> vetor =  List<double>(a.length);
+    List<List<double>> transposta =  List<List<double>>(b[0].length);
+    double soma = 0;
+    for(int k = 0; k < b[0].length; k++){
+      for(int i = 0; i < a.length; i++){
+        for(int j = 0; j < a[0].length; j++){
+          soma = soma + a[i][j] * b[j][k];  
+        }//dentro do j
+        vetor[i] = soma;
+        soma = 0;
+      }//dentro do i 
+      transposta[k] = vetor.toList();
+    }//dentro do k
+    return transposta;
+  }
+
+  List<List<double>> mat_transpose(a){
+    int m = a.length, n = a[0].length; // m rows and n cols
+    List<List<double>> b = List<List<double>>(n);
+    for (int j = 0; j < n; ++j) b[j] = new List<double>(m);
+    for (int i = 0; i < m; ++i)
+      for (int j = 0; j < n; ++j)
+        b[j][i] = a[i][j];
+    return b;
+  }
+
+  List<List<double>> inverterMatriz(List<List<double>> A,int n){
+    double con;
+    for (int k=0; k<n; k++) {
+      con = A[k][k];
+      A[k][k] = 1;
+      for (int j=0; j<n; j++)
+        A[k][j] = A[k][j] / con;
+      for (int i=0; i<n; i++) {
+        if (i!=k) {
+          con = A[i][k];
+          A[i][k] = 0.0;
+          for (int j=0; j<n; j++)
+            A[i][j] = A[i][j] - A[k][j]*con;
+        }
+      }
+    }
+    return A;
+  }

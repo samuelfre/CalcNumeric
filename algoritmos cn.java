@@ -122,8 +122,8 @@ main() {
   definirMatrizLeU(_l, _u);
   List<List<double>> _Linvertida = inverterMatriz(_l, _l.length); //inverte _l tb n sei pq...
   List<List<double>> _y = mat_transpose(multiplicarMatrizes(_Linvertida, b));
-	List<List<double>> _Uinvertida = inverterMatriz(_u, _u.length);
-	List<List<double>> _x = mat_transpose(multiplicarMatrizes(_Uinvertida, _y));
+  List<List<double>> _Uinvertida = inverterMatriz(_u, _u.length);
+  List<List<double>> _x = mat_transpose(multiplicarMatrizes(_Uinvertida, _y));
   print(_x);
  
 
@@ -202,3 +202,29 @@ main() {
     }
     return A;
   }
+
+Integração Numérica (Método dos Trapézios) - dart
+--------------------------------------------------------------------------------------
+
+import 'dart:math' as m;
+
+main() {
+  num n = 1001; // Número de subdivisões. PS.: Quero 1000 divisões, porém, inicio com 1001 pois quero trabalhar dentro dos loops com i > 0.
+  List<num> vetorY = List(n);  // Declaro o vetor que irá armazenar todos os f(x).
+  num h = (7 - 1) / (n - 1);  // (intervalo final - intervalo inicial) / número de subdivisões.
+  num k = (h + 1);  // Necessário para implementar os subintervalos Xi's
+  vetorY[1] = m.pow(m.e, m.cos(1)); // Armazena o primeiro valor de f(x), -> f(1), ou seja, a função aplicada ao ponto x = 1.
+  for (var i = 2; i < n; i++) { // Entra dentro do vetor que armazena todos os f(x) e armazena seus respectivos valores. PS.: Inicio o loop com 2 pois f(0) não me interessa e f(1) já foi preenchido. Vai até n que é 1001 pois o loop para em 1000.
+    vetorY[i] = k * m.pow(m.e, m.cos(k)); 
+    k = k + h;  // Adiciona h ao valor anterior de X. No caso, a variável independente X é chamada de k.
+  }
+  num s = (h / 2) * (vetorY[1] + 2 * somaYi(vetorY, n) + vetorY[n - 1]);  // Efetua a soma através da fórmula para o método do trapézio.
+  print(s);
+}
+num somaYi(List<num> vetor, int l){ // Devolve o somatório interno da fórmula do método dos trapézios.
+  num s = 0;
+  for (var i = 2; i < l - 2; i++) {
+    s = s + vetor[i];
+  }
+  return s;
+}

@@ -228,3 +228,63 @@ num somaYi(List<num> vetor, int l){ // Devolve o somatório interno da fórmula 
   }
   return s;
 }
+
+
+---
+    import 'dart:math' as m;
+
+main() {
+  num n = 1001; // Número de subdivisões. PS.: Quero 1000 divisões, porém, inicio com 1001 pois quero trabalhar dentro dos loops com i > 0.
+  List<num> vetorY = List(n);  // Declaro o vetor que irá armazenar todos os f(x).
+  num h = (7 - 1) / (n - 1);  // (intervalo final - intervalo inicial) / número de subdivisões.
+  num k = (h + 1);  // Necessário para implementar os subintervalos Xi's
+  vetorY[1] = m.pow(m.e, m.cos(1)); // Armazena o primeiro valor de f(x), -> f(1), ou seja, a função aplicada ao ponto x = 1.
+  for (var i = 2; i < n; i++) { // Entra dentro do vetor que armazena todos os f(x) e armazena seus respectivos valores. PS.: Inicio o loop com 2 pois f(0) não me interessa e f(1) já foi preenchido. Vai até n que é 1001 pois o loop para em 1000.
+    vetorY[i] = k * m.pow(m.e, m.cos(k)); 
+    k = k + h;  // Adiciona h ao valor anterior de X. No caso, a variável independente X é chamada de k.
+  }
+  num s = (h / 2) * (vetorY[1] + 2 * somaYi(vetorY, n) + vetorY[n - 1]);  // Efetua a soma através da fórmula para o método do trapézio.
+  //print(s);
+  
+  num hSimpson = n / 2;
+  num sSimpson = (hSimpson / 3) * (vetorY[1] + 4*somatorios(vetorY, n, false) + 2*somatorios(vetorY, n, true) + vetorY[n - 1]);
+  
+  print(sSimpson);
+  
+} //fim  Main
+
+
+
+num somaYi(List<num> vetor, int l){ // Devolve o somatório interno da fórmula do método dos trapézios.
+  num s = 0;
+  for (var i = 2; i < l - 2; i++) {
+    s = s + vetor[i];
+  }
+  return s;
+}
+
+
+num somatorios(List<num> vetor, int l /*tamanho do subintervalo*/, bool j){
+  num s = 0;
+  print(j);
+  if(j){	//Se for true, é par.
+    for(var i = 1; i < (((l - 1) / 2)) - 1; i++){
+      if(pegarPar(i)){
+        s = s + vetor[i];
+        print(s.toString() + ' entrou no par');        
+      }
+    }  
+  }
+  else if(!j){//Se for false, é impar.
+    for(var i = 1; i < ((l - 1) / 2); i++){
+      if(!pegarPar(i)){
+        s = s + vetor[i];
+        print(s.toString() + ' entrou no impar'); 
+      }
+    }
+  }
+ 	print(s.toString() + ' fora dos loops'); 
+  return s;
+}
+
+bool pegarPar(int i) => (i / 2 == 0) ? true : false;

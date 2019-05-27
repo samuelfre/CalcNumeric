@@ -288,3 +288,107 @@ num somatorios(List<num> vetor, int l /*tamanho do subintervalo*/, bool j){
 }
 
 bool pegarPar(int i) => (i / 2 == 0) ? true : false;
+
+
+
+
+----------------------
+    import 'dart:math' as m;
+
+main() {/*
+  double a = 1;
+  double b = 7;
+  num n = 1001; // Número de subdivisões. PS.: Quero a000 divisões, porém, inicio com a00a pois quero trabalhar dentro dos loops com i > 0.
+  List<num> vetorY = List(n);  // Declaro o vetor que irá armazenar todos os f(x).
+  num h = (b - a) / (n - 1);  // (intervalo final - intervalo inicial) / número de subdivisões.
+  num k = (h + 1);  // Necessário para implementar os subintervalos Xi's
+  vetorY[1] = m.pow(m.e, m.cos(a)); // Armazena o primeiro valor de f(x), -> f(a), ou seja, a função aplicada ao ponto x = a.
+  for (var i = 2; i < n; i++) { // Entra dentro do vetor que armazena todos os f(x) e armazena seus respectivos valores. PS.: Inicio o loop com 2 pois f(0) não me interessa e f(a) já foi preenchido. Vai até n que é a00a pois o loop para em a000.
+    vetorY[i] = k * m.pow(m.e, m.cos(k)); 
+    k = k + h;  // Adiciona h ao valor anterior de X. No caso, a variável independente X é chamada de k.
+  }
+
+  num s = (h / 2) * (vetorY[1] + 2 * somaYi(vetorY, n) + vetorY[n - 1]);  // Efetua a soma através da fórmula para o método do trapézio.
+  print(s);
+  //----
+  */
+
+  //---- intervalo de a até b
+  
+  double sSimpson = 0;
+  num n = 1000;
+  double a = 1;
+  double b = 7;
+  double hSimpson = (b - a) / n;
+  double x0 = a;
+  double x2 = b;
+  double x1 = (a + b) / 2;
+  int it = 1;
+  while (x0 < x2) {    
+    sSimpson = sSimpson + (hSimpson / 3) * (f(x0) + 4*f(x1) + f(x2));
+    x0 = x0 + hSimpson;
+    it++;
+  }
+  
+  print(sSimpson);
+
+} //fim  Main
+
+
+num f(num i) => i * m.pow(m.e, m.cos(i));
+
+num somaYi(List<num> vetor, int l){ // Devolve o somatório interno da fórmula do método dos trapézios.
+  num s = 0;
+  for (var i = 2; i < l - 2; i++) {
+    s = s + vetor[i];
+  }
+  return s;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+num somatorios(List<num> vetor, int l /*tamanho do subintervalo*/, int j){
+  num s = 0;
+  switch (j) {
+    case 1:
+      for(var i = 1; i < (((l - 1) / 2)) - 1; i++){
+      if(pegarPar(i)){
+        s = s + vetor[i];
+        //print(i.toString() + ' entrou no par');        
+      }
+    }
+      break;
+    case 2:
+      for(var i = 1; i < ((l - 1) / 2); i++){
+      if(!pegarPar(i)){
+        s = s + vetor[i];
+        //print(i.toString() + ' entrou no impar'); 
+      }
+    }
+      break;
+    default:
+  }
+  return s;
+}
+
+bool pegarPar(int i) => (i % 2 == 0) ? true : false;

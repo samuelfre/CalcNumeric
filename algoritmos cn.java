@@ -392,3 +392,110 @@ num somatorios(List<num> vetor, int l /*tamanho do subintervalo*/, int j){
 }
 
 bool pegarPar(int i) => (i % 2 == 0) ? true : false;
+
+Método QR
+-------------------------------------------
+
+import 'dart:math' as m;
+
+main() {    
+  List<List<double>> A = [[5, 2, 1], [2, 3, 1], [1, 1, 1]];  
+  List<List<List<double>>> sequenciaAK = List<List<List<double>>>
+    .generate(1, (int index) => List<List<double>>(A.length), growable: true);  //part.
+  int k = 0;  
+  sequenciaAK[0] = A;  
+  List<List<List<double>>> pegarDecomposta = List<List<List<double>>>
+    .generate(2, (int index) => List<List<double>>(A.length));  //part.
+  
+  while(parada(sequenciaAK[k]) > m.pow(10, -3)){    
+    pegarDecomposta = decompor(sequenciaAK[k]);  
+    sequenciaAK.add(transposta(multiplicarMatrizes(pegarDecomposta[1], pegarDecomposta[0]))); 
+    k++;    
+  }
+  
+  print(sequenciaAK[k][0]);
+  print('\n' + sequenciaAK[k][1].toString());  
+  print('\n' + sequenciaAK[k][2].toString());
+  
+  
+}
+double parada(List<List<double>> Ak){
+  double parada = 0;
+  for(int i = 0; i < Ak.length; i++){
+    for(int j = 0; j <= i - 1; j++){
+        num a = Ak[i][j];
+        parada = parada + a.abs();   
+    }
+  }
+  return parada;
+}
+
+List<List<List<double>>> decompor(List<List<double>> A){
+  List<List<List<double>>> decomposta = List.generate(2, (int index) => List<List<double>>(A.length));
+  List<List<double>> Q = pegarIdentidade(A);
+  List<List<double>> R = List<List<double>>.generate(A.length, (int index) => List<double>(A[0].length));
+  List<List<double>> U = List<List<double>>.generate(A.length, (int index) => List<double>(A[0].length));
+  R = A;
+  for(int q = 1; q < A.length; q++){
+    for(int p = 0; p <= q - 1; p++){
+      U = obterU(A, p, q);
+      Q = transposta(multiplicarMatrizes(Q, transposta(U)));      
+    }
+  }
+  R = transposta(multiplicarMatrizes(transposta(Q), R));
+  decomposta = [Q, R];
+  return decomposta;
+}
+
+List<List<double>> transposta(List<List<double>> A){
+  List<List<double>> transposta = List<List<double>>.generate(A.length, (int index) => List<double>(A[0].length));
+  for(int i = 0; i < A.length; i++){
+    for(int j = 0; j < A[0].length; j++){
+      if(i != j)
+        transposta[i][j] = A[j][i];
+      else
+        transposta[i][j] = A[i][j];
+    }
+  }
+  return transposta;
+}
+
+List<List<double>> obterU(List<List<double>> A, int p, int q) {
+  double sen = A[q][p] / m.sqrt(m.pow(A[p][p], 2) + m.pow(A[q][p], 2));
+  double cos = A[p][p] / m.sqrt(m.pow(A[p][p], 2) + m.pow(A[q][p], 2));
+  List<List<double>> U = pegarIdentidade(A);
+  U[q][q] = cos;
+  U[p][p] = cos;
+  U[p][q] = sen;
+  U[q][p] = -sen;
+  return U;
+}
+
+List<List<double>> pegarIdentidade(List<List<double>> A){
+  List<List<double>> identidade = List<List<double>>.generate(A.length, (int index) => List(A[0].length));
+  for(int i = 0; i < A.length; i++){
+    for(int j = 0; j < A[0].length; j++)
+      if(i == j)
+        identidade[i][j] = 1;
+    	else
+        identidade[i][j] = 0;
+  }
+  return identidade;
+}
+
+List<List<double>> multiplicarMatrizes(List<List<double>> a, List<List<double>> b){
+ 		List<double> vetor =  List<double>.generate(a.length, (int index) => 0);
+ 		List<List<double>> transposta =  List<List<double>>.generate(b[0].length, (int index) => List<double>(b.length));
+    double soma = 0;
+    for(int k = 0; k < b[0].length; k++){
+      for(int i = 0; i < a.length; i++){
+        for(int j = 0; j < a[0].length; j++){
+          soma = soma + a[i][j] * b[j][k];  
+        }//dentro do j
+        vetor[i] = soma;
+        soma = 0;
+      }//dentro do i 
+      transposta[k] = vetor.toList();
+    }//dentro do k
+    return transposta;
+  }

@@ -125,9 +125,6 @@ main() {
   List<List<double>> _Uinvertida = inverterMatriz(_u, _u.length);
   List<List<double>> _x = mat_transpose(multiplicarMatrizes(_Uinvertida, _y));
   print(_x);
- 
-
-
 }
 
   void criarMatrizL(List<List<double>> l, List<List<double>> a){
@@ -209,129 +206,42 @@ Integração Numérica (Método dos Trapézios) - dart
 import 'dart:math' as m;
 
 main() {
-  num n = 1001; // Número de subdivisões. PS.: Quero 1000 divisões, porém, inicio com 1001 pois quero trabalhar dentro dos loops com i > 0.
-  List<num> vetorY = List(n);  // Declaro o vetor que irá armazenar todos os f(x).
-  num h = (7 - 1) / (n - 1);  // (intervalo final - intervalo inicial) / número de subdivisões.
-  num k = (h + 1);  // Necessário para implementar os subintervalos Xi's
-  vetorY[1] = m.pow(m.e, m.cos(1)); // Armazena o primeiro valor de f(x), -> f(1), ou seja, a função aplicada ao ponto x = 1.
-  for (var i = 2; i < n; i++) { // Entra dentro do vetor que armazena todos os f(x) e armazena seus respectivos valores. PS.: Inicio o loop com 2 pois f(0) não me interessa e f(1) já foi preenchido. Vai até n que é 1001 pois o loop para em 1000.
-    vetorY[i] = k * m.pow(m.e, m.cos(k)); 
-    k = k + h;  // Adiciona h ao valor anterior de X. No caso, a variável independente X é chamada de k.
-  }
-  num s = (h / 2) * (vetorY[1] + 2 * somaYi(vetorY, n) + vetorY[n - 1]);  // Efetua a soma através da fórmula para o método do trapézio.
-  print(s);
-}
-num somaYi(List<num> vetor, int l){ // Devolve o somatório interno da fórmula do método dos trapézios.
-  num s = 0;
-  for (var i = 2; i < l - 2; i++) {
-    s = s + vetor[i];
-  }
-  return s;
-}
-
-
----
-    import 'dart:math' as m;
-
-main() {
-  num n = 1001; // Número de subdivisões. PS.: Quero 1000 divisões, porém, inicio com 1001 pois quero trabalhar dentro dos loops com i > 0.
-  List<num> vetorY = List(n);  // Declaro o vetor que irá armazenar todos os f(x).
-  num h = (7 - 1) / (n - 1);  // (intervalo final - intervalo inicial) / número de subdivisões.
-  num k = (h + 1);  // Necessário para implementar os subintervalos Xi's
-  vetorY[1] = m.pow(m.e, m.cos(1)); // Armazena o primeiro valor de f(x), -> f(1), ou seja, a função aplicada ao ponto x = 1.
-  for (var i = 2; i < n; i++) { // Entra dentro do vetor que armazena todos os f(x) e armazena seus respectivos valores. PS.: Inicio o loop com 2 pois f(0) não me interessa e f(1) já foi preenchido. Vai até n que é 1001 pois o loop para em 1000.
-    vetorY[i] = k * m.pow(m.e, m.cos(k)); 
-    k = k + h;  // Adiciona h ao valor anterior de X. No caso, a variável independente X é chamada de k.
-  }
-  num s = (h / 2) * (vetorY[1] + 2 * somaYi(vetorY, n) + vetorY[n - 1]);  // Efetua a soma através da fórmula para o método do trapézio.
-  //print(s);
-  
-  num hSimpson = n / 2;
-  num sSimpson = (hSimpson / 3) * (vetorY[1] + 4*somatorios(vetorY, n, false) + 2*somatorios(vetorY, n, true) + vetorY[n - 1]);
-  
-  print(sSimpson);
-  
-} //fim  Main
-
-
-
-num somaYi(List<num> vetor, int l){ // Devolve o somatório interno da fórmula do método dos trapézios.
-  num s = 0;
-  for (var i = 2; i < l - 2; i++) {
-    s = s + vetor[i];
-  }
-  return s;
-}
-
-
-num somatorios(List<num> vetor, int l /*tamanho do subintervalo*/, bool j){
-  num s = 0;
-  print(j);
-  if(j){	//Se for true, é par.
-    for(var i = 1; i < (((l - 1) / 2)) - 1; i++){
-      if(pegarPar(i)){
-        s = s + vetor[i];
-        print(s.toString() + ' entrou no par');        
-      }
-    }  
-  }
-  else if(!j){//Se for false, é impar.
-    for(var i = 1; i < ((l - 1) / 2); i++){
-      if(!pegarPar(i)){
-        s = s + vetor[i];
-        print(s.toString() + ' entrou no impar'); 
-      }
-    }
-  }
- 	print(s.toString() + ' fora dos loops'); 
-  return s;
-}
-
-bool pegarPar(int i) => (i / 2 == 0) ? true : false;
-
-
-
-
-----------------------
-    import 'dart:math' as m;
-
-main() {/*
   double a = 1;
   double b = 7;
-  num n = 1001; // Número de subdivisões. PS.: Quero a000 divisões, porém, inicio com a00a pois quero trabalhar dentro dos loops com i > 0.
+  num n = 1001; // Número de subdivisões. PS.: Quero 1000 divisões, porém, inicio com 1001 pois quero trabalhar dentro dos loops com i > 0.
   List<num> vetorY = List(n);  // Declaro o vetor que irá armazenar todos os f(x).
   num h = (b - a) / (n - 1);  // (intervalo final - intervalo inicial) / número de subdivisões.
   num k = (h + 1);  // Necessário para implementar os subintervalos Xi's
   vetorY[1] = m.pow(m.e, m.cos(a)); // Armazena o primeiro valor de f(x), -> f(a), ou seja, a função aplicada ao ponto x = a.
-  for (var i = 2; i < n; i++) { // Entra dentro do vetor que armazena todos os f(x) e armazena seus respectivos valores. PS.: Inicio o loop com 2 pois f(0) não me interessa e f(a) já foi preenchido. Vai até n que é a00a pois o loop para em a000.
+  for (var i = 2; i < n; i++) { // Entra dentro do vetor que armazena todos os f(x) e armazena seus respectivos valores. PS.: Inicio o loop com 2 pois f(0) não me interessa e f(1) já foi preenchido. Vai até n que é 1001 pois o loop para em 1000.
     vetorY[i] = k * m.pow(m.e, m.cos(k)); 
     k = k + h;  // Adiciona h ao valor anterior de X. No caso, a variável independente X é chamada de k.
   }
-
   num s = (h / 2) * (vetorY[1] + 2 * somaYi(vetorY, n) + vetorY[n - 1]);  // Efetua a soma através da fórmula para o método do trapézio.
   print(s);
-  //----
-  */
-
-  //---- intervalo de a até b
+    
+  /* ---- intervalo de a até b
   
   double sSimpson = 0;
-  num n = 1000;
+  num n = 23;
   double a = 1;
   double b = 7;
   double hSimpson = (b - a) / n;
   double x0 = a;
-  double x2 = b;
-  double x1 = (a + b) / 2;
+  double x2 = a + hSimpson;
+  double x1 = (x0 + x2) / 2;
   int it = 1;
-  while (x0 < x2) {    
-    sSimpson = sSimpson + (hSimpson / 3) * (f(x0) + 4*f(x1) + f(x2));
+  while (x0 < b) {    
+    sSimpson = sSimpson + (hSimpson / 6) * (f(x0) + 4*f(x1) + f(x2));
     x0 = x0 + hSimpson;
+    x1 = x1 + hSimpson;
+    x2 = x2 + hSimpson;
     it++;
-  }
-  
+  }  
   print(sSimpson);
-
+  print(it);
+  
+*/
 } //fim  Main
 
 
@@ -345,68 +255,20 @@ num somaYi(List<num> vetor, int l){ // Devolve o somatório interno da fórmula 
   return s;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-num somatorios(List<num> vetor, int l /*tamanho do subintervalo*/, int j){
-  num s = 0;
-  switch (j) {
-    case 1:
-      for(var i = 1; i < (((l - 1) / 2)) - 1; i++){
-      if(pegarPar(i)){
-        s = s + vetor[i];
-        //print(i.toString() + ' entrou no par');        
-      }
-    }
-      break;
-    case 2:
-      for(var i = 1; i < ((l - 1) / 2); i++){
-      if(!pegarPar(i)){
-        s = s + vetor[i];
-        //print(i.toString() + ' entrou no impar'); 
-      }
-    }
-      break;
-    default:
-  }
-  return s;
-}
-
-bool pegarPar(int i) => (i % 2 == 0) ? true : false;
-
 Método QR
--------------------------------------------
+--------------------------------------------------------------------------------------
 
 import 'dart:math' as m;
 
 main() {    
   List<List<double>> A = [[5, 2, 1], [2, 3, 1], [1, 1, 1]];  
   List<List<List<double>>> sequenciaAK = List<List<List<double>>>
-    .generate(1, (int index) => List<List<double>>(A.length), growable: true);  //part.
+    .generate(1, (int index) => List<List<double>>(A.length), growable: true);
   int k = 0;  
   sequenciaAK[0] = A;  
   List<List<List<double>>> pegarDecomposta = List<List<List<double>>>
-    .generate(2, (int index) => List<List<double>>(A.length));  //part.
-  
+    .generate(2, (int index) => List<List<double>>(A.length));
+    
   while(parada(sequenciaAK[k]) > m.pow(10, -3)){    
     pegarDecomposta = decompor(sequenciaAK[k]);  
     sequenciaAK.add(transposta(multiplicarMatrizes(pegarDecomposta[1], pegarDecomposta[0]))); 
@@ -416,9 +278,8 @@ main() {
   print(sequenciaAK[k][0]);
   print('\n' + sequenciaAK[k][1].toString());  
   print('\n' + sequenciaAK[k][2].toString());
-  
-  
 }
+
 double parada(List<List<double>> Ak){
   double parada = 0;
   for(int i = 0; i < Ak.length; i++){
